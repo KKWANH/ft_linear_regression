@@ -6,7 +6,7 @@
 #    By: kimkwanho <kimkwanho@student.42.fr>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 12:28:15 by kimkwanho         #+#    #+#              #
-#    Updated: 2022/12/28 13:03:24 by kimkwanho        ###   ########.fr        #
+#    Updated: 2022/12/29 17:24:54 by kimkwanho        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,9 @@ all:
 	run
 
 clean:
-	rm -rf __pycache__
+	rm -rf srcs/__pycache__
+	rm -rf srcs/ft_env
+	rm -rf srcs/parameter.dat
 
 setup:
 	sh $(SETUP_SRC)
