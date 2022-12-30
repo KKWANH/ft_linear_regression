@@ -1,7 +1,7 @@
 # --------------------------------------------------------------------
 # importing
 from pathlib import Path
-from util import color as clr
+from util import colors as c
 
 # --------------------------------------------------------------------
 # utilization functions
@@ -40,6 +40,8 @@ def get_params():
 	# reading file
 	with open(file_name, 'r') as file:
 		for line in file.readlines():
+			if (is_float(line.split()[0]) == False):
+				continue
 			arrayList.extend(line.split())
 	file.close()
 
@@ -64,30 +66,29 @@ def get_params():
 
 # variable setting
 theta1, theta0, x_min, x_max  = get_params()
-print(f"{clr.CYAN}[i] [params]{clr.RESET}\t  {theta0}, {theta1}, {x_min}, {x_min}")
+print(f"{c.CYAN}[i]      [params]{c.RESET}        {theta0}, {theta1}, {x_min}, {x_min}")
 
 # mileage input
 while True:
 	try:
 		# 👇️ use int() instead of float
 		# if you only accept integers
-		x = float(input(f"{clr.MAGENTA}[i] [mileage]{clr.RESET}\t  "))
+		x = float(input(f"{c.PURPLE}[?]      [mileage]{c.RESET}       "))
 		if (x > 0):
-			print(f"{clr.CYAN}[?] [mileage]{clr.RESET}\t  {x}")
+			print(f"{c.CYAN}[i]      [mileage]{c.RESET}       {x}")
 			break
 		else:
-			print(f"{clr.YELLOW}[X] [WARNING]{clr.RESET}\t  Please enter a positive number.")
+			print(f"{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a positive number.")
 	except ValueError:
-		print(f"{clr.YELLOW}[X] [WARNING]{clr.RESET}\t  Please enter a number.")
+		print(f"{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a number.")
 
 # mileage normalize 
 normalizedX = normalize(x, x_min, x_max)
-print(f"> {x} vs {normalizedX}")
-print(f"{clr.CYAN}[i] [normalized x]{clr.RESET}\t  {x} →", "{0:.5f}".format(normalizedX))
+print(f"{c.CYAN}[i]      [normalized x]{c.RESET}  {x} →", "{0:.5f}".format(normalizedX))
 y = theta0 + theta1 * normalizedX
 
 # result 
 if y >= 0:
-	print(f"{clr.CYAN}[i] [estimate]{clr.RESET}\t ", "{0:.3f}".format(y))
+	print(f"{c.GREEN}[i]      [estimate]{c.RESET}     ", "{0:.3f}".format(y))
 else:
-	print(f"{clr.CYAN}[i] [estimate]{clr.RESET}\t ", "{0:.3f}".format(y), f"{clr.RED}[this number is meaningless, out of range]{clr.RESET}")
+	print(f"{c.YELLOW}[X]      [estimate]{c.RESET}     ", "{0:.3f}".format(y), f"{c.RED}[this number is meaningless, out of range]{c.RESET}")

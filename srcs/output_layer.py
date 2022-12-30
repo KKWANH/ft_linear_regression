@@ -15,11 +15,11 @@ class OutputLayer:
 		self.y = tmp
 	
 	def backward(self, _t):
-		delta = self.y
+		delta = self.y - _t
 		self.w_grad = numpy.dot(self.x.T, delta)
 		self.b_grad = numpy.sum(delta, axis=0)
 		self.x_grad = numpy.dot(delta, self.w.T)
 
 	def update(self, _l_rate, _length):
-		self.w -= _l_rate * (1/_length) * self.w_grad
-		self.b -= _l_rate * (1/_length) * self.b_grad
+		self.w -= _l_rate / _length * self.w_grad
+		self.b -= _l_rate / _length * self.b_grad

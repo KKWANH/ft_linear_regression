@@ -5,6 +5,7 @@ import numpy
 import matplotlib.pylab as plt
 
 from output_layer import OutputLayer
+from util import colors as c
 
 
 # --------------------------------------------------------------------
@@ -25,7 +26,7 @@ def get_cost(_y, _y_pred):
 def normalize(_x):
 	x_max = numpy.max(_x)
 	x_min = numpy.min(_x)
-	# print(f"[D] [normalize]\t  {_x, x_min, x_max},  {_x - x_min},  {x_max - x_min},  {(_x - x_min) / (x_max - x_min)}")
+	# print(f"{c.YELLOW}[D] [normalize]{c.RESET}     {_x, x_min, x_max},  {_x - x_min},  {x_max - x_min},  {(_x - x_min) / (x_max - x_min)}")
 	return (_x - x_min) / (x_max - x_min)
 
 #회귀식 입력-> 입력층 (-> 은닉층) -> 출력층 -> 출력
@@ -36,11 +37,11 @@ def normalize(_x):
 
 # preparation
 readed_data	= pandas.read_csv("./data.csv")
-input		= readed_data['km'].to_numpy()
-x_max		= numpy.max(input)
-x_min		= numpy.min(input)
+input_		= readed_data['km'].to_numpy()
+x_max		= numpy.max(input_)
+x_min		= numpy.min(input_)
 answer		= readed_data['price'].to_numpy()
-input		= normalize(input)
+input_		= normalize(input_)
 length		= len(answer)
 
 # gradient_descent(_input, _answer, _length)
@@ -48,10 +49,10 @@ def gradient_descent(_input, _answer, _length):
 	# setting
 	len_in	= 1			# count of input neuron layer
 	len_out	= 1			# count of output neuron layer
-	w_b_width = 0.01
+	w_b_width = 0.01	# 가중치와 편향 설정을 위한 정규분포의 표준편차
 	l_rate = 0.05		# learning rate
 	epoch = 2001		# epoch
-	interval = 40		# printing interval
+	interval = 40		# interval for printing
 
 	# initialization
 	output_layer = OutputLayer(w_b_width, len_in, len_out)
@@ -61,6 +62,8 @@ def gradient_descent(_input, _answer, _length):
 	plot_b = []
 
 	# training
+	print(f"{c.BLUE}┌──────────────────────────────────────────────────────────────────────────────────────────────────┐{c.RESET}")
+	print(f"{c.BLUE}│                                                                                                  │{c.RESET}")
 	for i in range(epoch):
 		# index shuffle
 		i_random = numpy.arange(_length)
@@ -70,30 +73,33 @@ def gradient_descent(_input, _answer, _length):
 			x = _input[j:j+1]	# input
 			t = _answer[j:j+1]	# answer
 
-			# print(f"[D] [reshape]\t  {x} vs {x.reshape(1, 1)}")
+			# print(f"{c.YELLOW}[D] [reshape]{c.RESET}      {x} vs {x.reshape(1, 1)}")
 			output_layer.forward(x.reshape(1, 1))
 			output_layer.backward(t.reshape(1, 1))
 			output_layer.update(l_rate, _length)
 	
 		if i != 0 and i % interval == 0:
-			_w = output_layer.w.reshape(-1)[0]
-			_b = output_layer.b.reshape(-1)[0]
-			_pred = _w * _input + _b
-			_rmse = get_cost(answer, _pred)
+			w = output_layer.w.reshape(-1)[0]
+			b = output_layer.b.reshape(-1)[0]
+			pred = w * _input + b
+			rmse = get_cost(answer, pred)
 
 			plot_x.append(i)
-			plot_y.append(_rmse)
-			plot_w.append(_w)
-			plot_b.append(_b)
+			plot_y.append(rmse)
+			plot_w.append(w)
+			plot_b.append(b)
 
-			print(	f"[Epoch]",		 "[{0:4}/{1:4}]  ".format(i, epoch),
-					f"[RMSE]",		 "[{:.5f}]  ".format(_rmse),
-					f"[weight/θ_1]", "[{:.5f}]  ".format(_w),
-					f"[bias/θ_0]",	 "[{:.5f}]  ".format(_b))
-
+			print(	f"{c.BLUE}│ ",
+					f"{c.BOLD}{c.PURPLE}[Epoch]{c.RESET}",		"{0:4}/{1:4}    ".format(i, epoch),
+					f"{c.BOLD}{c.CYAN}[RMSE]{c.RESET}",		 	"{0: >10.5f}    ".format(rmse),
+					f"{c.BOLD}{c.GREEN}[weight/θ_1]{c.RESET}",	"{0: >11.5f}    ".format(w),
+					f"{c.BOLD}{c.YELLOW}[bias/θ_0]{c.RESET}",	"{0: >10.5f} ".format(b),
+					f"{c.BLUE}│{c.RESET}")
+	print(f"{c.BLUE}│                                                                                                  │{c.RESET}")
+	print(f"{c.BLUE}└──────────────────────────────────────────────────────────────────────────────────────────────────┘{c.RESET}")
 	plt.plot(plot_x, plot_y, marker="+", color="red",	label="RMSE")
-	plt.plot(plot_x, plot_y, marker="*", color="green", label="weight/θ_1")
-	plt.plot(plot_x, plot_y, marker=".", color="gray",	label="bias/θ_0")
+	plt.plot(plot_x, plot_w, marker="*", color="green", label="weight/θ_1")
+	plt.plot(plot_x, plot_b, marker=".", color="gray",	label="bias/θ_0")
 	plt.xlabel("epoch")
 	plt.ylabel("RMSError")
 	plt.legend()
@@ -101,21 +107,23 @@ def gradient_descent(_input, _answer, _length):
 
 	return output_layer.w.reshape(-1)[0], output_layer.b.reshape(-1)[0]
 
-w, b = gradient_descent(input, answer, length)
+w, b = gradient_descent(input_, answer, length)
 
-print(f"θ0 = {b}, θ1 = {w}")
-pred = w * input + b
-print(f"RMSError {str(get_cost(answer, pred))}")
+pred = w * input_ + b
+print(f"{c.BOLD}{c.YELLOW}θ0{c.RESET}(bias)   = {b}")
+print(f"{c.BOLD}{c.YELLOW}θ1{c.RESET}(weight) = {w}")
+print(f"{c.BOLD}{c.YELLOW}RMSError{c.RESET}   = {str(get_cost(answer, pred))}")
 
-plt.plot(input, pred, marker="+", color="blue", label="y_pred")
-plt.scatter(input, answer, marker="+", label="y_real")
+plt.plot(input_, pred, marker="+", color="blue", label="y_pred")
+plt.scatter(input_, answer, marker="+", label="y_real")
 plt.xlabel(f"normalized mileage({x_min}km ~ {x_max}km) to (0 ~ 1)")
 plt.ylabel("price")
 plt.legend()
 plt.show()
 
 with open("parameter.dat", "w") as file:
-	file.write("{0:.5f} {1:.5f} {2:.1f} {3:.1f}\n".format(w, b, x_min, x_max))
+	file.write("weight\t\t\tbias\t\t\tx_min\t\tx_max\n")
+	file.write("{0:<6.5f}\t\t{1:<6.5f}\t\t{2:<6.1f}\t\t{3:<6.1f}\n".format(w, b, x_min, x_max))
 file.close()
 
 
