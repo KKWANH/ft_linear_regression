@@ -66,29 +66,29 @@ def get_params():
 
 # variable setting
 theta1, theta0, x_min, x_max  = get_params()
-print(f"{c.CYAN}[i]      [params]{c.RESET}        {theta0}, {theta1}, {x_min}, {x_min}")
+print(f"{c.BOLD}{c.CYAN}[i]      [params]{c.RESET}        {theta0}, {theta1}, {x_min}, {x_min}")
 
 # mileage input
 while True:
 	try:
 		# 👇️ use int() instead of float
 		# if you only accept integers
-		x = float(input(f"{c.PURPLE}[?]      [mileage]{c.RESET}       "))
+		x = float(input(f"{c.BOLD}{c.PURPLE}[?]      [mileage]{c.RESET}{c.PURPLE}[km]{c.RESET}   {c.BOLD}{c.UNDERLINE}"))
 		if (x > 0):
-			print(f"{c.CYAN}[i]      [mileage]{c.RESET}       {x}")
+			print(f"{c.RESET}{c.BOLD}{c.CYAN}[i]      [mileage]{c.RESET}       {x}")
 			break
 		else:
-			print(f"{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a positive number.")
+			print(f"{c.BOLD}{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a positive number.")
 	except ValueError:
-		print(f"{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a number.")
+		print(f"{c.BOLD}{c.YELLOW}[X]      [WARNING]{c.RESET}       Please enter a number.")
 
 # mileage normalize 
 normalizedX = normalize(x, x_min, x_max)
-print(f"{c.CYAN}[i]      [normalized x]{c.RESET}  {x} →", "{0:.5f}".format(normalizedX))
+print(f"{c.BOLD}{c.CYAN}[i]      [normalized x]{c.RESET}  {x} →", "{0:.5f}".format(normalizedX))
 y = theta0 + theta1 * normalizedX
 
 # result 
 if y >= 0:
-	print(f"{c.GREEN}[i]      [estimate]{c.RESET}     ", "{0:.3f}".format(y))
+	print(f"{c.BOLD}{c.GREEN}[i]      [estimate]{c.RESET}     ", "{0:.3f}".format(y))
 else:
-	print(f"{c.YELLOW}[X]      [estimate]{c.RESET}     ", "{0:.3f}".format(y), f"{c.RED}[this number is meaningless, out of range]{c.RESET}")
+	print(f"{c.BOLD}{c.YELLOW}[X]      [estimate]{c.RESET}     ", "{0:.3f}".format(y), f"{c.RED}[this number is meaningless, out of range]{c.RESET}")
