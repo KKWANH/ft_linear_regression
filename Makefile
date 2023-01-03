@@ -6,7 +6,7 @@
 #    By: kkim <kkim@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/28 12:28:15 by kimkwanho         #+#    #+#              #
-#    Updated: 2023/01/03 16:01:12 by kkim             ###   ########.fr        #
+#    Updated: 2023/01/03 16:06:59 by kkim             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ clean:
 
 setup:
 	@printf "\033[1m\033[32m[Setup]\033[0m\t Setting virtual-environment\n"
-	@sh setup.sh
+	@sh "srcs/setup.sh"
 
 env:
 	@printf "\033[1m\033[32m[Env]\033[0m\t Running virtual-environment.\n"
