@@ -36,7 +36,7 @@ def normalize(_x):
 # 최적화 알고리즘: 확률적 경사 하강법
 
 # preparation
-readed_data	= pandas.read_csv("./data.csv")
+readed_data	= pandas.read_csv("data/data.csv")
 input_		= readed_data['km'].to_numpy()
 x_max		= numpy.max(input_)
 x_min		= numpy.min(input_)
