@@ -15,20 +15,25 @@ cd linear_regression
 ```Shell
 # To get informations about specitfic make keywords
 make help
-
+```
+```Shell
 # Remove temporary files
 make clean
-
+```
+```Shell
 # Setup python virtual environmetns
 make setup
-
+```
+```Shell
 # Enable the virtual env that you just made
 make env
-
+```
+```Shell
 # Predicting.
 #   If you input the mileage(km), and you will receive predicted price.
 make predict
-
+```
+```Shell
 # Training
 #   Train and make [parameter.dat] as a result.
 make train
